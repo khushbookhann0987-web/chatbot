@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint | Khushboo Khan's portfolio assistant</title>
+  <meta name="description" content="Ask Sprint about Khushboo Khan's projects, tools, experience and education." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- Profile panel -->
+    <aside class="profile" aria-label="About Khushboo Khan">
+      <div class="profile__top">
+        <div class="portrait" id="portrait">
+          <img id="portraitImg" alt="" hidden />
+          <span id="portraitFallback" aria-hidden="true">KK</span>
+        </div>
+        <div>
+          <h2 id="ownerName">Khushboo Khan</h2>
+          <p class="profile__role" id="ownerRole">Project Manager</p>
+        </div>
+      </div>
+
+      <p class="profile__tagline" id="tagline"></p>
+
+      <div class="profile__block">
+        <h3>Tools she uses</h3>
+        <ul class="chips" id="skills"></ul>
+      </div>
+
+      <div class="profile__block">
+        <h3>Find her online</h3>
+        <ul class="links" id="links"></ul>
+      </div>
+
+      <p class="profile__note">
+        Sprint is an AI assistant. Its answers come from Khushboo's portfolio, so it may not know everything.
+      </p>
+    </aside>
+
+    <!-- Chat panel -->
+    <main class="chat">
+      <header class="chat__head">
+        <div class="bot-mark" aria-hidden="true">S</div>
+        <div class="chat__title">
+          <h1 id="botName">Sprint</h1>
+          <p>Ask about Khushboo's work</p>
+        </div>
+        <button class="ghost" id="clearBtn" type="button" title="Start a new chat">New chat</button>
+      </header>
+
+      <!-- Plan, Track, Deliver progress: To do / In progress / Done -->
+      <div class="tracker" id="tracker" data-state="todo" role="status" aria-live="polite">
+        <div class="tracker__step" data-step="todo"><i></i><span>Ask</span></div>
+        <div class="tracker__step" data-step="progress"><i></i><span>Working</span></div>
+        <div class="tracker__step" data-step="done"><i></i><span>Answered</span></div>
+      </div>
+
+      <section class="log" id="log" aria-live="polite" aria-label="Conversation">
+        <div class="welcome" id="welcome">
+          <h2 id="welcomeTitle">Hi, I'm Sprint.</h2>
+          <p id="welcomeText"></p>
+          <ul class="tasks" id="suggestions"></ul>
+        </div>
+      </section>
+
+      <form class="composer" id="composer" autocomplete="off">
+        <label for="input" class="sr-only">Your question</label>
+        <textarea id="input" rows="1" maxlength="800" placeholder="Ask Sprint a question" required></textarea>
+        <button type="submit" id="sendBtn" aria-label="Send message">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6l-.01 6.53L15 12 3.39 13.87z"/></svg>
+        </button>
+      </form>
+    </main>
+  </div>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>

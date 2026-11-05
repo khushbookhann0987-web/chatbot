@@ -1,0 +1,81 @@
+{
+  "chatbot": {
+    "name": "Sprint",
+    "greeting": "I'm Khushboo's portfolio assistant. Ask me about her projects, tools, experience or education.",
+    "suggestions": [
+      "What projects has Khushboo managed?",
+      "Which project management tools does she use?",
+      "Tell me about her work experience",
+      "What is her education?",
+      "How can I contact her?"
+    ]
+  },
+  "owner": {
+    "name": "Khushboo Khan",
+    "role": "Project Manager",
+    "tagline": "I plan the work, track the tasks, and finish projects on time.",
+    "photo": "https://khushbookhan-portfolio.netlify.app/images/profile.jpeg",
+    "summary": "Khushboo works in project management. She has two years of experience as an administrator in an educational institute, has led a university group project, and has completed a project management training program. She holds a master's equivalent degree in Educational Leadership and Management. She likes clear goals, steady progress, and teams that know what to do next.",
+    "approach": "She uses clear plans and simple updates to keep teams moving from the first idea to the final delivery. Her working style is summed up as Plan, Track, Deliver."
+  },
+  "contact": {
+    "portfolio": "https://khushbookhan-portfolio.netlify.app/",
+    "email": "youremail@example.com",
+    "linkedin": "https://www.linkedin.com/"
+  },
+  "skills": [
+    "Microsoft Project",
+    "Jira",
+    "Microsoft Excel",
+    "Notion",
+    "Trello",
+    "Asana"
+  ],
+  "projects": [
+    {
+      "title": "Event Management Project",
+      "description": "Planned an event from start to finish, with a schedule, a task list and team roles."
+    },
+    {
+      "title": "Student Attendance Management System",
+      "description": "Planned a system to record and check student attendance in an easy way."
+    },
+    {
+      "title": "Task Management Project",
+      "description": "Set up tasks, deadlines and owners so the team could see what was due and when."
+    },
+    {
+      "title": "Library Management System",
+      "description": "Planned how a library can keep track of its books, members and returns."
+    },
+    {
+      "title": "E-commerce Website Project",
+      "description": "Managed the plan for an online shop, from the first idea to the steps for launch."
+    }
+  ],
+  "experience": [
+    {
+      "role": "Administrator",
+      "organization": "Educational Institute",
+      "duration": "2 years"
+    },
+    {
+      "role": "Project Coordinator",
+      "organization": "University Group Project",
+      "duration": "3 months"
+    },
+    {
+      "role": "Project Management Trainee",
+      "organization": "Training Program",
+      "duration": "3 months"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Educational Leadership and Management",
+      "level": "Master's equivalent",
+      "institution": "University of Education",
+      "years": "2023 to 2025"
+    }
+  ]
+}
