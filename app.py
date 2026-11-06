@@ -6,7 +6,8 @@ Flask backend that:
   * builds a system prompt from data/portfolio.json
   * forwards chat messages to the OpenRouter API and streams the reply back
 
-The API key stays on the server (in .env). It is never sent to the browser.
+The API key stays on the server (in Render environment variables or local .env).
+It is never sent to the browser.
 """
 
 import json
@@ -35,11 +36,11 @@ MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini").strip()
 SITE_URL = os.getenv("SITE_URL", "https://khushbookhan-portfolio.netlify.app").strip()
 SITE_NAME = os.getenv("SITE_NAME", "Khushboo Khan Portfolio Assistant").strip()
 
-MAX_HISTORY = 10            # how many recent messages are sent to the model
-MAX_MESSAGE_CHARS = 800     # per-message length limit
+MAX_HISTORY = 10
+MAX_MESSAGE_CHARS = 800
 MAX_REPLY_TOKENS = 600
-RATE_LIMIT = 20             # requests allowed ...
-RATE_WINDOW = 60            # ... per this many seconds, per IP
+RATE_LIMIT = 20
+RATE_WINDOW = 60
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("sprint")
@@ -74,7 +75,6 @@ def build_system_prompt(data: dict) -> str:
     )
     skills = ", ".join(data["skills"])
 
-    # Only share contact details that are real, never template placeholders.
     contact_lines = [f"- Portfolio: {contact.get('portfolio', SITE_URL)}"]
     if not _is_placeholder(contact.get("email", "")):
         contact_lines.append(f"- Email: {contact['email']}")
@@ -149,7 +149,7 @@ def sse(payload: dict) -> str:
 
 def friendly_error(status: int) -> str:
     if status == 401:
-        return "The server's OpenRouter API key was rejected. Check OPENROUTER_API_KEY in the .env file."
+        return "The server's OpenRouter API key was rejected. Check OPENROUTER_API_KEY in the environment settings."
     if status == 402:
         return "The OpenRouter account is out of credits. Add credits or switch to a free model."
     if status == 404:
@@ -207,7 +207,6 @@ def stream_openrouter(history: list[dict]):
             resp.encoding = "utf-8"
             got_text = False
             for line in resp.iter_lines(decode_unicode=True):
-                # Skip blanks and SSE comments such as ": OPENROUTER PROCESSING"
                 if not line or line.startswith(":") or not line.startswith("data:"):
                     continue
                 data = line[5:].strip()
@@ -238,7 +237,7 @@ def stream_openrouter(history: list[dict]):
         return
     except requests.RequestException as exc:
         log.error("Network error talking to OpenRouter: %s", exc)
-        yield sse({"error": "Could not reach OpenRouter. Check your internet connection."})
+        yield sse({"error": "Could not reach OpenRouter. Check the server connection."})
         return
 
     yield sse({"done": True})
@@ -279,9 +278,12 @@ def config():
 @app.post("/api/chat")
 def chat():
     if not API_KEY:
-        return jsonify(error="No API key found. Add OPENROUTER_API_KEY to the .env file and restart."), 500
+        return jsonify(error="No API key found. Add OPENROUTER_API_KEY to the Render environment settings."), 500
 
-    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "unknown").split(",")[0].strip()
+    # Use the first forwarded IP when available (common behind Render's proxy).
+    forwarded_for = request.headers.get("X-Forwarded-For", "")
+    ip = (forwarded_for.split(",")[0].strip() if forwarded_for else request.remote_addr) or "unknown"
+
     if is_rate_limited(ip):
         return jsonify(error="You're sending messages quickly. Wait a moment and try again."), 429
 
@@ -303,12 +305,14 @@ def health():
 
 
 # --------------------------------------------------------------------------- #
+# Local development only. Render starts the app with Gunicorn.
+# --------------------------------------------------------------------------- #
 if __name__ == "__main__":
     if not API_KEY:
-        log.warning("OPENROUTER_API_KEY is not set. Copy .env.example to .env and add your key.")
+        log.warning("OPENROUTER_API_KEY is not set. Add it to your local .env file.")
     log.info("Sprint is using model: %s", MODEL)
     app.run(
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=int(os.getenv("PORT", "5000")),
-        debug=os.getenv("FLASK_DEBUG", "0") == "1",
+        debug=False,
     )

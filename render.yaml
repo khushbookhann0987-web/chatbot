@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sprint-portfolio-assistant
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: openai/gpt-4o-mini
+      - key: SITE_URL
+        value: https://khushbookhan-portfolio.netlify.app
+      - key: SITE_NAME
+        value: Khushboo Khan Portfolio Assistant
+      - key: FLASK_DEBUG
+        value: "0"
